@@ -1,0 +1,13 @@
+# --- ETL y Conexión a Cassandra ---
+pandas==2.2.2
+numpy==1.26.4
+astrapy==0.7.6
+pyspark==3.5.1
+python-dotenv==1.0.1
+
+# Visualización
+matplotlib==3.8.4
+seaborn==0.13.2
+
+# --- Notebooks en VS Code ---
+jupyter==1.0.0

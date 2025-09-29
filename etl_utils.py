@@ -1,15 +1,18 @@
 # etl_utils.py
 
-# --- Importación de librerías ---
+# --- Importación de librerías estándar ---
+import os
 import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+# --- PySpark ---
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import *  # col, lit, when, sum, etc. para transformaciones de DataFrames
 
 # --- Cargar variables de entorno desde .env ---
-import os
 from dotenv import load_dotenv
 
 # --- Conexión a Astra DB ---

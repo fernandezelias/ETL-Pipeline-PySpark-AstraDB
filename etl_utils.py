@@ -22,7 +22,7 @@ import seaborn as sns
 
 # --- Funciones ETL auxiliares ---
 
-def insertar_si_vacia(df: pd.DataFrame, coleccion: str, db):
+def insertar_si_vacia_pandas(df: pd.DataFrame, coleccion: str, db):
     """
     Inserta los datos de un DataFrame en una colección de Astra DB solo si la colección está vacía.
     """

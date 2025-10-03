@@ -24,7 +24,13 @@ import seaborn as sns
 
 def insertar_si_vacia_pandas(df: pd.DataFrame, coleccion: str, db):
     """
-    Inserta los datos de un DataFrame en una colección de Astra DB solo si la colección está vacía.
+    Inserta los datos de un **pandas DataFrame** en una colección de Astra DB 
+    solo si la colección está vacía.
+
+    - Reemplaza NaN por None para compatibilidad con JSON.
+    - Convierte fechas a string (yyyy-MM-dd) cuando corresponde.
+    - Crea la colección si no existe y realiza la inserción inicial controlada.
+    - Si la colección ya tiene datos, no inserta para evitar duplicados.
     """
     # Reemplaza NaN por None
     df_clean = df.where(pd.notnull(df), None)
@@ -41,6 +47,44 @@ def insertar_si_vacia_pandas(df: pd.DataFrame, coleccion: str, db):
         .to_dict(orient='records')
     )
     records = json.loads(json.dumps(records))
+
+    # Crea u obtiene la colección
+    if coleccion not in db.list_collection_names():
+        collection = db.create_collection(coleccion)
+    else:
+        collection = db.get_collection(coleccion)
+
+    # Inserta solo si está vacía
+    if collection.find_one() is None:
+        collection.insert_many(records)
+        print(f"✅ Insertados {len(records)} registros en '{coleccion}'.")
+    else:
+        print(f"ℹ️ La colección '{coleccion}' ya contiene datos. No se hicieron inserciones.")
+
+
+def insertar_si_vacia_spark(df_spark, coleccion: str, db):
+    """
+    Inserta los datos de un **Spark DataFrame ya transformado** en una colección de Astra DB 
+    solo si la colección está vacía.
+
+    - Convierte el Spark DataFrame a pandas para compatibilidad con el conector de Astra.
+    - Reemplaza NaN por None y convierte fechas a string (yyyy-MM-dd) si aplica.
+    - Crea la colección si no existe y realiza la inserción inicial controlada.
+    - Si la colección ya contiene datos, no inserta para evitar duplicados.
+    """
+    # Conversión de Spark DataFrame a pandas
+    df = df_spark.toPandas()
+
+    # Reemplaza NaN por None
+    df_clean = df.where(pd.notnull(df), None)
+
+    # Convierte fechas a string si aplica
+    df_clean = df_clean.applymap(
+        lambda x: x.strftime('%Y-%m-%d') if hasattr(x, 'strftime') else x
+    )
+
+    # Convierte a lista de dicts JSON-compatibles
+    records = json.loads(json.dumps(df_clean.to_dict(orient='records')))
 
     # Crea u obtiene la colección
     if coleccion not in db.list_collection_names():

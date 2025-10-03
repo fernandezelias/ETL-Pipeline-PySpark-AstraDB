@@ -93,3 +93,72 @@ def hash_column(df, column_name):
     except KeyError:
         print(f"La columna '{column_name}' no existe en el DataFrame.")
         return df
+    
+
+def generalize_date_to_decade(df, column_name):
+  """
+  Anonimiza una columna de tipo fecha, como una fecha de cumpleaños por ej,
+  aplicando la tecnica de generalización convirtiendola en su década correspondiente
+
+  Parameters:
+    df (pd.DataFrame): DataFrame que tiene los datos a anonimizar
+    column_name (str): Nombre de la columna que se anonimizará
+
+  Returns:
+    pd.DataFrame: DataFrame con los datos anonimizados con la técnica de generalización
+  """
+  # Verificar que df sea efectivamente un dataframe
+  if not isinstance(df, pd.DataFrame):
+    raise ValueError("El argumento 'df' debe ser un DataFrame.")
+
+  # Verificar que la columna brindada exista
+  if column_name not in df.columns:
+    raise ValueError(f"La columna '{column_name}' no existe en el DataFrame.")
+
+  # Convertir la columna a tipo datetime si no lo es
+  if df[column_name].dtype != "datetime64":
+    try:
+      df[column_name] = pd.to_datetime(df[column_name])
+    except Exception as e:
+      raise ValueError(f"No se pudo convertir la columna '{column_name}' a tipo datetime. Error: {e}")
+
+  # Aplicar la generalización a década
+  df.loc[:, f"{column_name}_decade"] = (df[column_name].dt.year // 10) * 10
+  return df
+
+
+def generalize_date_to_range(df, column_name, n_years=10):
+  """
+  Anonimiza una columna de tipo fecha, como una fecha de cumpleaños por ej,
+  aplicando la tecnica de generalización convirtiendola en un rango de años
+
+  Parameters:
+    df (pd.DataFrame): DataFrame que tiene los datos a anonimizar
+    column_name (str): Nombre de la columna que se anonimizará
+    n_years (int): Cantidad de años a considerar en el rango
+
+  Returns:
+    pd.DataFrame: DataFrame con los datos anonimizados con la técnica de generalización
+  """
+  # Verificar que df sea efectivamente un dataframe
+  if not isinstance(df, pd.DataFrame):
+    raise ValueError("El argumento 'df' debe ser un DataFrame.")
+
+  # Verificar que la columna brindada exista
+  if column_name not in df.columns:
+    raise ValueError(f"La columna '{column_name}' no existe en el DataFrame.")
+
+  # Convertir la columna a tipo datetime si no lo es
+  if df[column_name].dtype != "datetime64":
+    try:
+      df[column_name] = pd.to_datetime(df[column_name])
+    except Exception as e:
+      raise ValueError(f"No se pudo convertir la columna '{column_name}' a tipo datetime. Error: {e}")
+
+  # Aplicar la generalización a rango de años
+  # Crear columnas auxiliares _start y _end
+  df[f"{column_name}_start"] = (df[column_name].dt.year // 10) * 10
+  df[f"{column_name}_end"] = ((df[column_name].dt.year // 10) * 10) + n_years - 1
+  df[f"{column_name}_range"] = df[f"{column_name}_start"].astype(str) + " - " + df[f"{column_name}_end"].astype(str)
+  df = df.drop(columns=[f"{column_name}_start", f"{column_name}_end"])
+  return df

@@ -162,3 +162,46 @@ def generalize_date_to_range(df, column_name, n_years=10):
   df[f"{column_name}_range"] = df[f"{column_name}_start"].astype(str) + " - " + df[f"{column_name}_end"].astype(str)
   df = df.drop(columns=[f"{column_name}_start", f"{column_name}_end"])
   return df
+
+
+def mask_phone_number(df, column_name, n=5):
+    """
+    Enmascara parcialmente los números de teléfono
+    en la columna especificada del DataFrame.
+
+    Parameters:
+        df (pd.DataFrame): El DataFrame que contiene los datos.
+        column_name (str): El nombre de la columna que se va a anonimizar.
+        n (int): El número de dígitos a mantener.
+
+    Returns:
+        pd.DataFrame: El DataFrame modificado con los números de teléfono enmascarados.
+    """
+    try:
+        # Mantener los primeros n dígitos, reemplazar el resto con 'XXX'
+        df.loc[:, column_name] = df[column_name].str[:n] + 'XXXXX'
+        return df
+    except KeyError:
+        print(f"La columna '{column_name}' no existe en el DataFrame.")
+        return df
+    
+
+def mask_email(df, column_name):
+    """
+    Enmascara las direcciones de correo electrónico en la columna especificada del DataFrame,
+    manteniendo solo el dominio.
+
+    Parameters:
+        df (pd.DataFrame): El DataFrame que contiene los datos.
+        column_name (str): El nombre de la columna que se va a anonimizar.
+
+    Returns:
+        pd.DataFrame: El DataFrame modificado con los dominios de correo electrónico anonimizados.
+    """
+    try:
+        # Extraer el dominio de correo electrónico y reemplazar la columna
+        df.loc[:, column_name] = '****@' + df[column_name].str.split('@', n=1).str[1]
+        return df
+    except KeyError:
+        print(f"La columna '{column_name}' no existe en el DataFrame.")
+        return df

@@ -62,37 +62,6 @@ def insertar_si_vacia_pandas(df: pd.DataFrame, coleccion: str, db):
         print(f"ℹ️ La colección '{coleccion}' ya contiene datos. No se hicieron inserciones.")
 
 
-def insertar_si_vacia_spark(spark_session, df_spark, table: str, keyspace: str):
-    """
-    Inserta los datos de un Spark DataFrame en una tabla CQL de Astra DB
-    solo si la tabla está vacía (evita duplicar cargas iniciales).
-    Requiere que la tabla exista y que la sesión Spark tenga el conector Cassandra.
-    """
-    # ¿La tabla ya tiene datos?
-    try:
-        existing = (
-            spark_session.read
-                .format("org.apache.spark.sql.cassandra")
-                .options(table=table, keyspace=keyspace)
-                .load()
-                .limit(1)
-                .count()
-        )
-    except Exception:
-        existing = 0  # si falla la lectura, tratamos como vacía
-
-    # Inserción controlada
-    if existing == 0:
-        (df_spark.write
-            .format("org.apache.spark.sql.cassandra")
-            .options(table=table, keyspace=keyspace)
-            .mode("append")
-            .save())
-        print(f"✅ Insertados {df_spark.count()} registros en {keyspace}.{table}")
-    else:
-        print(f"ℹ️ {keyspace}.{table} ya contiene datos. No se hicieron inserciones.")
-
-
 def get_hash_value(input_str):
     """
     Calcula el valor hash de una cadena de entrada.

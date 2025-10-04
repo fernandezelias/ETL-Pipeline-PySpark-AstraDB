@@ -1,3 +1,5 @@
+🌐 Disponible en: [Español](README.md) | [English](README_EN.md)
+
 # 🧱 ETL_Cassandra_Astra
 
 Este proyecto implementa un **pipeline ETL batch** sobre una **arquitectura Data Lake zonificada**, utilizando **PySpark** para el procesamiento distribuido y **DataStax Astra DB (Cassandra)** como sistema de almacenamiento escalable.  

@@ -213,28 +213,18 @@ def mask_email(df, column_name):
         print(f"La columna '{column_name}' no existe en el DataFrame.")
         return df
     
-# --- Aplicación de esquemas predefinidos en capa Smart (colecciones Data API) ---
+# --- Casteo de esquema en Smart (para colecciones Data API) ---
 
 def enforce_schema(df, casts):
     """
-    Aplica un conjunto de transformaciones de tipo sobre las columnas de un DataFrame.
-
-    Parameters
-    ----------
-    df : pyspark.sql.DataFrame
-        DataFrame sobre el que se aplicarán los casteos.
-    casts : dict
-        Mapeo {columna: tipo_o_función}. Los valores pueden ser:
-        - 'date', 'timestamp', 'int', 'long', 'string'
-        - Una función que reciba una columna y devuelva una columna transformada.
-
-    Returns
-    -------
-    pyspark.sql.DataFrame
-        DataFrame con los tipos ajustados según el mapeo indicado.
+    Aplica un conjunto de casteos sobre las columnas de un DataFrame Spark.
+    Los tipos pueden especificarse como strings ('date', 'timestamp', 'int', etc.)
+    o como funciones que operan sobre columnas.
     """
     out = df
     for name, target in casts.items():
+        if name not in df.columns:
+            continue
         if callable(target):
             out = out.withColumn(name, target(col(name)))
         else:
@@ -255,9 +245,8 @@ def enforce_schema(df, casts):
 # --- Mapeos de casteo alineados con la capa Universal ---
 
 SCHEMA_CASTS_USERS = {
-    "birth_dt": "date",
-    "phone":    "long",
-    "rubro":    "int",
+    "phone": "long",
+    "rubro": "int",
 }
 
 SCHEMA_CASTS_TRANSACTIONS = {
@@ -282,19 +271,7 @@ SCHEMA_CASTS_ONBOARDING = {
 
 def apply_universal_schema(df, dataset_name: str):
     """
-    Aplica el mapeo de casteo correspondiente al dataset especificado.
-
-    Parameters
-    ----------
-    df : pyspark.sql.DataFrame
-        DataFrame sobre el cual aplicar el esquema.
-    dataset_name : {'users', 'transactions', 'onboarding'}
-        Nombre lógico del dataset.
-
-    Returns
-    -------
-    pyspark.sql.DataFrame
-        DataFrame con los tipos ajustados al esquema definido para el dataset.
+    Aplica el mapeo de casteos correspondiente al dataset indicado.
     """
     name = dataset_name.lower()
     if name == "users":

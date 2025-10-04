@@ -102,3 +102,15 @@ pip install -r requirements.txt
 - Modelado zonificado de un Data Lake y separación clara de etapas de limpieza vs análisis.  
 - Uso de vistas temporales para análisis SQL sin necesidad de un metastore persistente.  
 - Cálculo de métricas de comportamiento de usuarios a gran escala.
+
+
+---
+
+📄 Licencia
+Este proyecto está bajo la licencia MIT.
+
+---
+
+✍️ Autor: Elias Fernández  
+📧 Contacto: fernandezelias86@gmail.com  
+🔗 LinkedIn: www.linkedin.com/in/eliasfernandez208

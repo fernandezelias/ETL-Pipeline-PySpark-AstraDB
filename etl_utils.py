@@ -212,3 +212,95 @@ def mask_email(df, column_name):
     except KeyError:
         print(f"La columna '{column_name}' no existe en el DataFrame.")
         return df
+    
+# --- Aplicación de esquemas predefinidos en capa Smart (colecciones Data API) ---
+
+def enforce_schema(df, casts):
+    """
+    Aplica un conjunto de transformaciones de tipo sobre las columnas de un DataFrame.
+
+    Parameters
+    ----------
+    df : pyspark.sql.DataFrame
+        DataFrame sobre el que se aplicarán los casteos.
+    casts : dict
+        Mapeo {columna: tipo_o_función}. Los valores pueden ser:
+        - 'date', 'timestamp', 'int', 'long', 'string'
+        - Una función que reciba una columna y devuelva una columna transformada.
+
+    Returns
+    -------
+    pyspark.sql.DataFrame
+        DataFrame con los tipos ajustados según el mapeo indicado.
+    """
+    out = df
+    for name, target in casts.items():
+        if callable(target):
+            out = out.withColumn(name, target(col(name)))
+        else:
+            t = target.lower()
+            if t == "date":
+                out = out.withColumn(name, to_date(col(name)))
+            elif t == "timestamp":
+                out = out.withColumn(name, to_timestamp(col(name)))
+            elif t in ("int", "integer"):
+                out = out.withColumn(name, col(name).cast("int"))
+            elif t == "long":
+                out = out.withColumn(name, col(name).cast("long"))
+            elif t == "string":
+                out = out.withColumn(name, col(name).cast("string"))
+    return out
+
+
+# --- Mapeos de casteo alineados con la capa Universal ---
+
+SCHEMA_CASTS_USERS = {
+    "birth_dt": "date",
+    "phone":    "long",
+    "rubro":    "int",
+}
+
+SCHEMA_CASTS_TRANSACTIONS = {
+    "transaction_dt": "date",
+    "type":           "int",
+    "segment":        "int",
+}
+
+SCHEMA_CASTS_ONBOARDING = {
+    "first_login_dt": "date",
+    "habito_dt":      "date",
+    "activacion_dt":  "date",
+    "setup_dt":       "date",
+    "return_dt":      "date",
+    "week_year":      "int",
+    "habito":         "int",
+    "activacion":     "int",
+    "setup":          "int",
+    "return":         "int",
+}
+
+
+def apply_universal_schema(df, dataset_name: str):
+    """
+    Aplica el mapeo de casteo correspondiente al dataset especificado.
+
+    Parameters
+    ----------
+    df : pyspark.sql.DataFrame
+        DataFrame sobre el cual aplicar el esquema.
+    dataset_name : {'users', 'transactions', 'onboarding'}
+        Nombre lógico del dataset.
+
+    Returns
+    -------
+    pyspark.sql.DataFrame
+        DataFrame con los tipos ajustados al esquema definido para el dataset.
+    """
+    name = dataset_name.lower()
+    if name == "users":
+        return enforce_schema(df, SCHEMA_CASTS_USERS)
+    if name == "transactions":
+        return enforce_schema(df, SCHEMA_CASTS_TRANSACTIONS)
+    if name == "onboarding":
+        return enforce_schema(df, SCHEMA_CASTS_ONBOARDING)
+    raise ValueError(f"Dataset desconocido: {dataset_name}")

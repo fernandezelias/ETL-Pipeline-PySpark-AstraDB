@@ -62,42 +62,42 @@ def insertar_si_vacia_pandas(df: pd.DataFrame, coleccion: str, db):
         print(f"ℹ️ La colección '{coleccion}' ya contiene datos. No se hicieron inserciones.")
 
 
-def insertar_si_vacia_spark(df_spark, coleccion: str, db):
+def insertar_si_vacia_spark(df_spark, table: str, keyspace: str):
     """
-    Inserta los datos de un **Spark DataFrame ya transformado** en una colección de Astra DB 
-    solo si la colección está vacía.
+    Inserta los datos de un **Spark DataFrame ya transformado** en una **tabla CQL de Astra DB**
+    solo si la tabla está vacía.
 
-    - Convierte el Spark DataFrame a pandas para compatibilidad con el conector de Astra.
-    - Reemplaza NaN por None y convierte fechas a string (yyyy-MM-dd) si aplica.
-    - Crea la colección si no existe y realiza la inserción inicial controlada.
-    - Si la colección ya contiene datos, no inserta para evitar duplicados.
+    - Utiliza el conector nativo Spark ↔ Cassandra para escribir directamente en tablas CQL.
+    - Verifica previamente si la tabla contiene datos mediante una lectura limitada.
+    - Si la tabla está vacía, inserta todos los registros del DataFrame en modo 'append'.
+    - Si ya contiene datos, no realiza inserciones para evitar duplicados.
+    - Requiere que la tabla CQL haya sido creada previamente en el keyspace especificado,
+      con columnas y tipos compatibles con el esquema del DataFrame.
     """
-    # Conversión de Spark DataFrame a pandas
-    df = df_spark.toPandas()
+    # Verificación previa: ¿la tabla ya tiene datos?
+    try:
+        existing = (
+            spark.read
+                 .format("org.apache.spark.sql.cassandra")
+                 .options(table=table, keyspace=keyspace)
+                 .load()
+                 .limit(1)
+                 .count()
+        )
+    except Exception:
+        # Si hay algún problema al leer (tabla vacía, permisos, etc.), se asume vacía
+        existing = 0
 
-    # Reemplaza NaN por None
-    df_clean = df.where(pd.notnull(df), None)
-
-    # Convierte fechas a string si aplica
-    df_clean = df_clean.applymap(
-        lambda x: x.strftime('%Y-%m-%d') if hasattr(x, 'strftime') else x
-    )
-
-    # Convierte a lista de dicts JSON-compatibles
-    records = json.loads(json.dumps(df_clean.to_dict(orient='records')))
-
-    # Crea u obtiene la colección
-    if coleccion not in db.list_collection_names():
-        collection = db.create_collection(coleccion)
+    # Inserción controlada
+    if existing == 0:
+        (df_spark.write
+                 .format("org.apache.spark.sql.cassandra")
+                 .options(table=table, keyspace=keyspace)
+                 .mode("append")
+                 .save())
+        print(f"✅ Insertados {df_spark.count()} registros en {keyspace}.{table}")
     else:
-        collection = db.get_collection(coleccion)
-
-    # Inserta solo si está vacía
-    if collection.find_one() is None:
-        collection.insert_many(records)
-        print(f"✅ Insertados {len(records)} registros en '{coleccion}'.")
-    else:
-        print(f"ℹ️ La colección '{coleccion}' ya contiene datos. No se hicieron inserciones.")
+        print(f"ℹ️ {keyspace}.{table} ya contiene datos. No se hicieron inserciones.")
 
 
 def get_hash_value(input_str):

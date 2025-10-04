@@ -62,39 +62,32 @@ def insertar_si_vacia_pandas(df: pd.DataFrame, coleccion: str, db):
         print(f"ℹ️ La colección '{coleccion}' ya contiene datos. No se hicieron inserciones.")
 
 
-def insertar_si_vacia_spark(df_spark, table: str, keyspace: str):
+def insertar_si_vacia_spark(spark_session, df_spark, table: str, keyspace: str):
     """
-    Inserta los datos de un **Spark DataFrame ya transformado** en una **tabla CQL de Astra DB**
-    solo si la tabla está vacía.
-
-    - Utiliza el conector nativo Spark ↔ Cassandra para escribir directamente en tablas CQL.
-    - Verifica previamente si la tabla contiene datos mediante una lectura limitada.
-    - Si la tabla está vacía, inserta todos los registros del DataFrame en modo 'append'.
-    - Si ya contiene datos, no realiza inserciones para evitar duplicados.
-    - Requiere que la tabla CQL haya sido creada previamente en el keyspace especificado,
-      con columnas y tipos compatibles con el esquema del DataFrame.
+    Inserta los datos de un Spark DataFrame en una tabla CQL de Astra DB
+    solo si la tabla está vacía (evita duplicar cargas iniciales).
+    Requiere que la tabla exista y que la sesión Spark tenga el conector Cassandra.
     """
-    # Verificación previa: ¿la tabla ya tiene datos?
+    # ¿La tabla ya tiene datos?
     try:
         existing = (
-            spark.read
-                 .format("org.apache.spark.sql.cassandra")
-                 .options(table=table, keyspace=keyspace)
-                 .load()
-                 .limit(1)
-                 .count()
+            spark_session.read
+                .format("org.apache.spark.sql.cassandra")
+                .options(table=table, keyspace=keyspace)
+                .load()
+                .limit(1)
+                .count()
         )
     except Exception:
-        # Si hay algún problema al leer (tabla vacía, permisos, etc.), se asume vacía
-        existing = 0
+        existing = 0  # si falla la lectura, tratamos como vacía
 
     # Inserción controlada
     if existing == 0:
         (df_spark.write
-                 .format("org.apache.spark.sql.cassandra")
-                 .options(table=table, keyspace=keyspace)
-                 .mode("append")
-                 .save())
+            .format("org.apache.spark.sql.cassandra")
+            .options(table=table, keyspace=keyspace)
+            .mode("append")
+            .save())
         print(f"✅ Insertados {df_spark.count()} registros en {keyspace}.{table}")
     else:
         print(f"ℹ️ {keyspace}.{table} ya contiene datos. No se hicieron inserciones.")

@@ -64,7 +64,7 @@ derby.log
 
 # --- Archivos específicos del proyecto ---
 # Si usás carpetas locales para staging, data lake u otros datos crudos, ignoralas aquí:
-# data/
+data/
 # datalake/
 
 # --- Archivos temporales ---

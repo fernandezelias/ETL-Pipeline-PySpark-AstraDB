@@ -61,8 +61,9 @@ Si desea ejecutar el pipeline localmente, cree una carpeta `data/` y ubique en e
 
 ## 🧰 Requisitos técnicos
 
-Este proyecto utiliza **PySpark con soporte Hive embebido**.  
+Este proyecto utiliza **PySpark en modo local** para crear vistas temporales y ejecutar consultas SQL sobre los datos transformados.  
 Además de las librerías de `requirements.txt`, es necesario tener instalado **Java 17** y definir la variable de entorno `JAVA_HOME`.
+
 
 En entornos Conda:
 

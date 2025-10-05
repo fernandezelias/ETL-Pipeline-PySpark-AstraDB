@@ -61,7 +61,7 @@ If you wish to run the pipeline locally, create a `data/` folder and place CSV f
 
 ## 🧰 Technical Requirements
 
-This project uses **PySpark with embedded Hive support**.  
+This project uses **PySpark in local mode** to create temporary views and run SQL queries on transformed data.  
 In addition to the libraries listed in `requirements.txt`, **Java 17** must be installed and the `JAVA_HOME` environment variable defined.
 
 For Conda environments:

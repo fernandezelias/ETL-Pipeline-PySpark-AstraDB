@@ -17,7 +17,6 @@ from pyspark.sql.functions import *  # col, lit, when, sum, etc. para transforma
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 # --- Funciones ETL auxiliares ---

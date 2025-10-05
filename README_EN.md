@@ -55,7 +55,7 @@ ETL_Cassandra_Astra/
 
 📂 **Data folder**  
 For privacy and licensing reasons, the original datasets used in this project are not included in the public repository.  
-If you wish to run the pipeline locally, place CSV files with the same structure as the original datasets in the `data/` folder.
+If you wish to run the pipeline locally, create a `data/` folder and place CSV files with the same structure as the original datasets inside it.
 
 ---
 

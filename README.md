@@ -55,7 +55,7 @@ ETL_Cassandra_Astra/
 
 📂 **Carpeta de datos**  
 Por razones de privacidad y licencia, los datasets originales utilizados en este proyecto no están incluidos en el repositorio público.  
-Si desea ejecutar el pipeline localmente, ubique en la carpeta `data/` archivos CSV con la misma estructura que los datasets originales.
+Si desea ejecutar el pipeline localmente, cree una carpeta `data/` y ubique en ella archivos CSV con la misma estructura que los datasets originales.
 
 ---
 

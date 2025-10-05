@@ -53,6 +53,12 @@ ETL_Cassandra_Astra/
 
 ---
 
+📂 **Data folder**
+For licensing and privacy reasons, the original datasets used in this project are not included in the public repository.  
+To run the pipeline locally, place the required CSV files in the `data/` folder.
+
+---
+
 ## 🧰 Technical Requirements
 
 This project uses **PySpark with embedded Hive support**.  

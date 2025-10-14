@@ -1,10 +1,14 @@
-# --- Python & Entornos ---
+# ==========================================================
+# ETL_Cassandra_Astra - .gitignore
+# ==========================================================
+
+# --- Python cache ---
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 
-# Entornos virtuales y variables sensibles
+# --- Virtual environments & credentials ---
 .env
 .venv/
 env/
@@ -13,70 +17,32 @@ ENV/
 env.bak/
 venv.bak/
 
-# Jupyter Notebooks
-.ipynb_checkpoints
+# --- Jupyter notebooks ---
+.ipynb_checkpoints/
 
-# --- Logs / Cachés / Tests ---
+# --- Logs & temporary files ---
 *.log
+logs/
 .cache/
-.mypy_cache/
-.dmypy.json
-.pytest_cache/
-.hypothesis/
-coverage.xml
-nosetests.xml
-htmlcov/
-.tox/
-.nox/
+*.tmp
 
-# --- Distribución / Packaging ---
-build/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-share/python-wheels/
-*.egg-info/
-MANIFEST
-
-# --- Documentación / Sphinx ---
-docs/_build/
-
-# --- Editores ---
-# PyCharm / JetBrains
-#.idea/
-
-# VSCode / Cursor
-.cursorignore
-.cursorindexingignore
-
-# Spyder / Rope
-.spyderproject
-.spyproject
-.ropeproject
-
-# --- Spark Metastore local ---
+# --- Spark local metastore ---
 spark-warehouse/
 metastore_db/
 derby.log
 
-# --- Archivos específicos del proyecto ---
-# Si usás carpetas locales para staging, data lake u otros datos crudos, ignoralas aquí:
+# --- Local data folders ---
 data/
 # datalake/
 
-# --- Archivos temporales ---
-*.spec
-*.manifest
-pip-log.txt
-pip-delete-this-directory.txt
+# --- Editors & IDEs ---
+.idea/
+.vscode/
+.cursorignore
+.cursorindexingignore
+.spyderproject
+.spyproject
+.ropeproject
 
-# --- PyInstaller ---
-# Generalmente generados automáticamente
-*.manifest
-*.spec
-
-# --- PyPI config ---
+# --- PyPI configuration ---
 .pypirc

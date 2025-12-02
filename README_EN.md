@@ -1,6 +1,6 @@
 # 🧱 ETL_Cassandra_Astra
 
-🌐 Disponible en: [Español](README.md)
+🌐 Disponible en [Español](README.md)
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue.svg)
 ![Spark](https://img.shields.io/badge/PySpark-3.x-orange.svg)

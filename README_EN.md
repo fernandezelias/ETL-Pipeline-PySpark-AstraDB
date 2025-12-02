@@ -4,8 +4,8 @@
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue.svg)
 ![Spark](https://img.shields.io/badge/PySpark-3.x-orange.svg)
-![Delta Lake](https://img.shields.io/badge/Delta%20Lake-1.x-blue.svg)
-![Prefect](https://img.shields.io/badge/Orchestration-Prefect%202.x-1abc9c.svg)
+![Cassandra](https://img.shields.io/badge/Database-Cassandra%20(Astra%20DB)-purple.svg)
+![Data Lake](https://img.shields.io/badge/Architecture-Data%20Lake%20Zoned-blue.svg)
 ![Status](https://img.shields.io/badge/Status-Active-success.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 

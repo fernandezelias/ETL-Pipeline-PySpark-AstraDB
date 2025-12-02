@@ -31,9 +31,9 @@ spark-warehouse/
 metastore_db/
 derby.log
 
-# --- Local data folders ---
-data/
-# datalake/
+# --- Data folders that should not upload actual files ---
+data/*
+!data/.gitkeep
 
 # --- Editors & IDEs ---
 .idea/

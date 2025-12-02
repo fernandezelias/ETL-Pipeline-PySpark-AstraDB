@@ -1,4 +1,4 @@
-🌐 Disponible en: [Español](README.md) | [English](README_EN.md)
+🌐 Available in: [English](README_EN.md)
 
 # 🧱 ETL_Cassandra_Astra
 
@@ -82,7 +82,7 @@ El archivo `.env` debe contener la variable `ASTRA_DB_TOKEN` con el token de aut
 1. Clonar el repositorio e instalar dependencias:
 
 ```bash
-git clone https://github.com/tu_usuario/ETL_Cassandra_Astra.git
+git clone https://github.com/fernandezelias/ETL_Cassandra_Astra.git
 cd ETL_Cassandra_Astra
 pip install -r requirements.txt
 ```

@@ -1,4 +1,4 @@
-🌐 Available in: [Español](README.md) | [English](README_EN.md)
+🌐 Disponible en: [Español](README.md)
 
 # 🧱 ETL_Cassandra_Astra
 
@@ -81,7 +81,7 @@ The `.env` file must contain the `ASTRA_DB_TOKEN` variable with the DataStax Ast
 1. Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/your_user/ETL_Cassandra_Astra.git
+git clone https://github.com/fernandezelias/ETL_Cassandra_Astra.git
 cd ETL_Cassandra_Astra
 pip install -r requirements.txt
 ```

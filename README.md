@@ -1,6 +1,13 @@
+# 🧱 ETL_Cassandra_Astra
+
 🌐 Available in: [English](README_EN.md)
 
-# 🧱 ETL_Cassandra_Astra
+![Python](https://img.shields.io/badge/Python-3.11-blue.svg)
+![Spark](https://img.shields.io/badge/PySpark-3.x-orange.svg)
+![Delta Lake](https://img.shields.io/badge/Delta%20Lake-1.x-blue.svg)
+![Prefect](https://img.shields.io/badge/Orchestration-Prefect%202.x-1abc9c.svg)
+![Status](https://img.shields.io/badge/Status-Active-success.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 Este proyecto implementa un **pipeline ETL batch** sobre una **arquitectura Data Lake zonificada**, utilizando **PySpark** para el procesamiento distribuido y **DataStax Astra DB (Cassandra)** como sistema de almacenamiento escalable.  
 

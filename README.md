@@ -129,4 +129,4 @@ Este proyecto está bajo la licencia MIT.
 
 ✍️ Autor: Elías Fernández  
 📧 Contacto: fernandezelias86@gmail.com  
-🔗 LinkedIn: www.linkedin.com/in/eliasfernandez208
+🔗 LinkedIn: [Perfil](www.linkedin.com/in/eliasfernandez208)

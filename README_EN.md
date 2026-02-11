@@ -120,16 +120,17 @@ pip install -r requirements.txt
 
 ---
 
-📄 License  
-This project is released under the MIT License.
+## 🪪 License
+This project is distributed under the MIT License.  
+See the [LICENSE](LICENSE) file.
 
 ---
 
 ## ✍️ Author
-**Elías Fernández**  
-📧 Contacto: fernandezelias86@gmail.com  
-🔗 LinkedIn: [Profile](https://www.linkedin.com/in/eliasfernandez208)
+**Elías Fernández**
 
 ---
 
-📁 **Repository:** ETL_Cassandra_Astra
+## 📫 Contact
+📧 [fernandezelias86@gmail.com](mailto:fernandezelias86@gmail.com)  
+🔗 LinkedIn: [Profile](https://www.linkedin.com/in/eliasfernandez208)
